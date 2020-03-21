@@ -32,6 +32,40 @@ void max7219_matrix_set_hex_string(uint64_t data) {
     }
 }
 
+void max7219_matrix_shift_left(void) {
+    for (uint8_t i = 0; i < 8; i++) {
+        matrix[i] <<= 1;
+    }
+}
+
+void max7219_matrix_shift_right(void) {
+    for (uint8_t i = 0; i < 8; i++) {
+        matrix[i] >>= 1;
+    }
+}
+
+void max7219_matrix_shift_left_circular(void) {
+    for (uint8_t i = 0; i < 8; i++) {
+        if (matrix[i] & (1 << 7)) {
+            matrix[i] <<= 1;
+            matrix[i] |= 1;
+        } else {
+            matrix[i] <<= 1;
+        }
+    }
+}
+
+void max7219_matrix_shift_right_circular(void) {
+    for (uint8_t i = 0; i < 8; i++) {
+        if (matrix[i] & 1) {
+            matrix[i] >>= 1;
+            matrix[i] |= (1 << 7);
+        } else {
+            matrix[i] >>= 1;
+        }
+    }
+}
+
 void max7219_matrix_clear(void) {
     for (uint8_t i = 0; i < 8; i++) {
         matrix[i] = 0;
