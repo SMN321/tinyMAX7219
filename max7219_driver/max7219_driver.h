@@ -43,4 +43,4 @@
 void max7219_init(void);
 void max7219_send_command(uint8_t address,uint8_t data);
 
-#endif
+#endif //MAX7219_DRIVER_H
