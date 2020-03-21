@@ -11,6 +11,8 @@ void max7219_matrix_set_pixel(uint8_t x, uint8_t y);
 void max7219_matrix_set_row(uint8_t row, uint8_t data);
 void max7219_matrix_set_col(uint8_t col, uint8_t data);
 void max7219_matrix_set_matrix(const uint8_t data[8]);// 8x8 bit -> uint8_t[8]
+void max7219_matrix_set_hex_string(uint64_t data);
+void max7219_matrix_clear(void);
 void max7219_matrix_update(void);
 
 #endif //MAX7219_MATRIX_H

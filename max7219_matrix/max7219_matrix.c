@@ -26,6 +26,18 @@ void max7219_matrix_set_matrix(const uint8_t data[8]) {
     }
 }
 
+void max7219_matrix_set_hex_string(uint64_t data) {
+    for (uint8_t i = 0; i < 8; i++) {
+        matrix[i] = 0xFF & (data >> (8 * (7 - i)));
+    }
+}
+
+void max7219_matrix_clear(void) {
+    for (uint8_t i = 0; i < 8; i++) {
+        matrix[i] = 0;
+    }
+}
+
 void max7219_matrix_update(void) {
     for (uint8_t i = 0; i < 8; i++) {
         max7219_send_command(i + 1, matrix[i]);
