@@ -11,7 +11,7 @@ void max7219_matrix_set_row(uint8_t row, uint8_t data) {
     matrix[row] = data;
 }
 
-//MSB of data will be in row 0, LSB of data will be in row 7
+//MSB of data will be in col 0, LSB of data will be in col 7
 void max7219_matrix_set_col(uint8_t col, uint8_t data) {
     uint8_t mask = ~(1 << (7 - col));
     for (uint8_t i = 0; i < 8; i++) {
