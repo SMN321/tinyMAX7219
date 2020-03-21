@@ -16,6 +16,11 @@ void max7219_matrix_shift_left(void);
 void max7219_matrix_shift_right(void);
 void max7219_matrix_shift_left_circular(void);
 void max7219_matrix_shift_right_circular(void);
+void max7219_matrix_invert(void);
+void max7219_matrix_rotate_left(void);
+void max7219_matrix_rotate_right(void);
+void max7219_matrix_flip_horizontal(void);
+void max7219_matrix_flip_vertical(void);
 void max7219_matrix_clear(void);
 void max7219_matrix_update(void);
 
