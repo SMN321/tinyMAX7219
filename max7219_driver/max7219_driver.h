@@ -26,6 +26,9 @@
 #define MAX7219_DISPLAY_TEST    0xF
 
 //register data
+#define MAX7219_INTENSITY_MIN   0x0
+#define MAX7219_INTENSITY_MID   0x8
+#define MAX7219_INTENSITY_MAX   0xF
 #define MAX7219_SCAN_LIMIT_0    0x0
 #define MAX7219_SCAN_LIMIT_1    0x1
 #define MAX7219_SCAN_LIMIT_2    0x2
