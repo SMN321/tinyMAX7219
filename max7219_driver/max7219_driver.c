@@ -4,23 +4,30 @@
 
 static inline void send_byte(uint8_t data) {
     USIDR = data;
-    //unrolled loop for faster computation
-    USICR = (1 << USIWM0) | (1 << USITC); //USIWM0 == 1 to use the 3-wire-mode
-    USICR = (1 << USIWM0) | (1 << USITC) | (1 << USICLK);
-    USICR = (1 << USIWM0) | (1 << USITC);
-    USICR = (1 << USIWM0) | (1 << USITC) | (1 << USICLK);
-    USICR = (1 << USIWM0) | (1 << USITC);
-    USICR = (1 << USIWM0) | (1 << USITC) | (1 << USICLK);
-    USICR = (1 << USIWM0) | (1 << USITC);
-    USICR = (1 << USIWM0) | (1 << USITC) | (1 << USICLK);
-    USICR = (1 << USIWM0) | (1 << USITC);
-    USICR = (1 << USIWM0) | (1 << USITC) | (1 << USICLK);
-    USICR = (1 << USIWM0) | (1 << USITC);
-    USICR = (1 << USIWM0) | (1 << USITC) | (1 << USICLK);
-    USICR = (1 << USIWM0) | (1 << USITC);
-    USICR = (1 << USIWM0) | (1 << USITC) | (1 << USICLK);
-    USICR = (1 << USIWM0) | (1 << USITC);
-    USICR = (1 << USIWM0) | (1 << USITC) | (1 << USICLK);
+    asm volatile (
+        "ldi r16, %A0"  "\n\t" //load mask
+        "ldi r17, %A1"  "\n\t"
+        "out %[usicr], r16"   "\n\t" //MSB
+        "out %[usicr], r17"   "\n\t"
+        "out %[usicr], r16"   "\n\t"
+        "out %[usicr], r17"   "\n\t"
+        "out %[usicr], r16"   "\n\t"
+        "out %[usicr], r17"   "\n\t"
+        "out %[usicr], r16"   "\n\t"
+        "out %[usicr], r17"   "\n\t"
+        "out %[usicr], r16"   "\n\t"
+        "out %[usicr], r17"   "\n\t"
+        "out %[usicr], r16"   "\n\t"
+        "out %[usicr], r17"   "\n\t"
+        "out %[usicr], r16"   "\n\t"
+        "out %[usicr], r17"   "\n\t"
+        "out %[usicr], r16"   "\n\t" //LSB
+        "out %[usicr], r17"   "\n\t"
+        :
+        : [usicr] "I" (_SFR_IO_ADDR(USICR)),
+          "n" ((1<<USIWM0)|(0<<USICS0)|(1<<USITC)),
+          "n" ((1<<USIWM0)|(0<<USICS0)|(1<<USITC)|(1<<USICLK))
+        );
     USISR = 0;
 }
 
