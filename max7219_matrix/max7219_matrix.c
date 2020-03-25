@@ -3,16 +3,16 @@
 
 static uint8_t matrix[8];
 
-void max7219_matrix_set_pixel(uint8_t row, uint8_t col) {
+inline void max7219_matrix_set_pixel(uint8_t row, uint8_t col) {
     matrix[row] |= (1 << (7 - col));
 }
 
-void max7219_matrix_set_row(uint8_t row, uint8_t data) {
+inline void max7219_matrix_set_row(uint8_t row, uint8_t data) {
     matrix[row] = data;
 }
 
 //MSB of data will be in col 0, LSB of data will be in col 7
-void max7219_matrix_set_col(uint8_t col, uint8_t data) {
+inline void max7219_matrix_set_col(uint8_t col, uint8_t data) {
     uint8_t mask = ~(1 << (7 - col));
     for (uint8_t i = 0; i < 8; i++) {
         matrix[i] &= mask; //set the column to 0
@@ -20,49 +20,49 @@ void max7219_matrix_set_col(uint8_t col, uint8_t data) {
     }
 }
 
-void max7219_matrix_set_matrix(const uint8_t data[8]) {
+inline void max7219_matrix_set_matrix(const uint8_t data[8]) {
     for (uint8_t i = 0; i < 8; i++) {
         matrix[i] = data[i];
     }
 }
 
-void max7219_matrix_set_hex_string(uint64_t data) {
+inline void max7219_matrix_set_hex_string(uint64_t data) {
     for (uint8_t i = 0; i < 8; i++) {
         matrix[i] = 0xFF & (data >> (8 * (7 - i)));
     }
 }
 
-void max7219_matrix_shift_left(void) {
+inline void max7219_matrix_shift_left(void) {
     for (uint8_t i = 0; i < 8; i++) {
         matrix[i] <<= 1;
     }
 }
 
-void max7219_matrix_shift_right(void) {
+inline void max7219_matrix_shift_right(void) {
     for (uint8_t i = 0; i < 8; i++) {
         matrix[i] >>= 1;
     }
 }
 
-void max7219_matrix_shift_left_circular(void) {
+inline void max7219_matrix_shift_left_circular(void) {
     for (uint8_t i = 0; i < 8; i++) {
         matrix[i] = (matrix[i] << 1) | (matrix[i] >> 7);
     }
 }
 
-void max7219_matrix_shift_right_circular(void) {
+inline void max7219_matrix_shift_right_circular(void) {
     for (uint8_t i = 0; i < 8; i++) {
         matrix[i] = (matrix[i] << 7) | (matrix[i] >> 1);
     }
 }
 
-void max7219_matrix_invert(void) {
+inline void max7219_matrix_invert(void) {
     for (uint8_t i = 0; i < 8; i++) {
         matrix[i] = ~matrix[i];
     }
 }
 
-void max7219_matrix_rotate_left(void) {
+inline void max7219_matrix_rotate_left(void) {
     uint8_t temp[8] = {0};
     for (uint8_t i = 0; i < 8; i++) {
         for (uint8_t j = 0; j < 8; j++) {
@@ -74,7 +74,7 @@ void max7219_matrix_rotate_left(void) {
     }
 }
 
-void max7219_matrix_rotate_right(void) {
+inline void max7219_matrix_rotate_right(void) {
     uint8_t temp[8] = {0};
     for (uint8_t i = 0; i < 8; i++) {
         for (uint8_t j = 0; j < 8; j++) {
@@ -86,7 +86,7 @@ void max7219_matrix_rotate_right(void) {
     }
 }
 
-void max7219_matrix_flip_horizontal(void) {
+inline void max7219_matrix_flip_horizontal(void) {
     uint8_t temp;
     for (uint8_t i = 0; i < 4; i++) {
         temp = matrix[7-i];
@@ -95,7 +95,7 @@ void max7219_matrix_flip_horizontal(void) {
     }
 }
 
-void max7219_matrix_flip_vertical(void) {
+inline void max7219_matrix_flip_vertical(void) {
     uint8_t b;
     for (uint8_t i = 0; i < 7; i++) {
         b = matrix[i];
@@ -107,13 +107,13 @@ void max7219_matrix_flip_vertical(void) {
     }
 }
 
-void max7219_matrix_clear(void) {
+inline void max7219_matrix_clear(void) {
     for (uint8_t i = 0; i < 8; i++) {
         matrix[i] = 0;
     }
 }
 
-void max7219_matrix_update(void) {
+inline void max7219_matrix_update(void) {
     for (uint8_t i = 0; i < 8; i++) {
         max7219_send_command(i + 1, matrix[i]);
     }
