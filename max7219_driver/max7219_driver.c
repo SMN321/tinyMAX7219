@@ -1,5 +1,5 @@
 
-#include "MAX7219_driver.h"
+#include "max7219_driver.h"
 #include <avr/io.h>
 
 static inline void send_byte(uint8_t data) {
