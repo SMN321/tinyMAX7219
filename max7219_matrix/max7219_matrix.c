@@ -3,7 +3,15 @@
 
 static uint8_t matrix[8];
 
-inline void max7219_matrix_set_pixel(uint8_t row, uint8_t col) {
+inline void max7219_matrix_set_pixel(uint8_t row, uint8_t col, uint8_t state) {
+    if (state) {
+        matrix[row] |= (1u << (uint8_t) (7 - col));
+    } else {
+        matrix[row] &= ~(1u << (uint8_t) (7-col));
+    }
+}
+
+inline void max7219_matrix_activate_pixel(uint8_t row, uint8_t col) {
     matrix[row] |= (1u << (uint8_t) (7 - col));
 }
 
@@ -16,6 +24,7 @@ inline void max7219_matrix_set_col(uint8_t col, uint8_t data) {
     uint8_t mask = ~(1u << (uint8_t) (7 - col));
     for (uint8_t i = 0; i < 8; i++) {
         matrix[i] &= mask; //set the column col in row i to 0
+        //maybe change this to a conditional branch for the sake of readability
         matrix[i] |= ((uint8_t) ((uint8_t) data >> (uint8_t) (7 - i)) & 1u) << (uint8_t) (7 - col); //set the data
     }
 }
