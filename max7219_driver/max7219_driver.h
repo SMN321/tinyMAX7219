@@ -5,9 +5,9 @@
 #include <inttypes.h>
 
 //pins
-#define MAX7219_SCK PB2
-#define MAX7219_DO PB1
-#define MAX7219_CS PB0
+#define MAX7219_SCK ((uint8_t) PB2)
+#define MAX7219_DO ((uint8_t) PB1)
+#define MAX7219_CS ((uint8_t) PB0)
 
 //register address map
 #define MAX7219_NO_OP           0x0
