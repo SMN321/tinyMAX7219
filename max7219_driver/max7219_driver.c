@@ -4,30 +4,32 @@
 
 static inline void send_byte(uint8_t data) {
     USIDR = data;
+    // this seemed to work in the simulations
+    // the whole block needed 20 clock cycles there
     asm volatile (
-        "ldi r16, %A0"  "\n\t" //load mask
-        "ldi r17, %A1"  "\n\t"
-        "out %[usicr], r16"   "\n\t" //MSB
-        "out %[usicr], r17"   "\n\t"
-        "out %[usicr], r16"   "\n\t"
-        "out %[usicr], r17"   "\n\t"
-        "out %[usicr], r16"   "\n\t"
-        "out %[usicr], r17"   "\n\t"
-        "out %[usicr], r16"   "\n\t"
-        "out %[usicr], r17"   "\n\t"
-        "out %[usicr], r16"   "\n\t"
-        "out %[usicr], r17"   "\n\t"
-        "out %[usicr], r16"   "\n\t"
-        "out %[usicr], r17"   "\n\t"
-        "out %[usicr], r16"   "\n\t"
-        "out %[usicr], r17"   "\n\t"
-        "out %[usicr], r16"   "\n\t" //LSB
-        "out %[usicr], r17"   "\n\t"
-        :
-        : [usicr] "I" (_SFR_IO_ADDR(USICR)),
-          "n" ((1<<USIWM0)|(0<<USICS0)|(1<<USITC)),
-          "n" ((1<<USIWM0)|(0<<USICS0)|(1<<USITC)|(1<<USICLK))
-        );
+    /* asm instructions */
+    "out %[usicr], %[high]" "\n\t"
+    "out %[usicr], %[low]"  "\n\t"
+    "out %[usicr], %[high]" "\n\t"
+    "out %[usicr], %[low]"  "\n\t"
+    "out %[usicr], %[high]" "\n\t"
+    "out %[usicr], %[low]"  "\n\t"
+    "out %[usicr], %[high]" "\n\t"
+    "out %[usicr], %[low]"  "\n\t"
+    "out %[usicr], %[high]" "\n\t"
+    "out %[usicr], %[low]"  "\n\t"
+    "out %[usicr], %[high]" "\n\t"
+    "out %[usicr], %[low]"  "\n\t"
+    "out %[usicr], %[high]" "\n\t"
+    "out %[usicr], %[low]"  "\n\t"
+    "out %[usicr], %[high]" "\n\t"
+    "out %[usicr], %[low]"
+    : /* no outputs */
+    : /* only inputs */
+    [usicr] "M" (_SFR_IO_ADDR(USICR)),
+    [high] "r" ((1<<USIWM0)|(0<<USICS0)|(1<<USITC)),
+    [low] "r" ((1<<USIWM0)|(0<<USICS0)|(1<<USITC)|(1<<USICLK))
+    /* no clobbers */);
     USISR = 0;
 }
 

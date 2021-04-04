@@ -7,6 +7,7 @@
 //pins
 #define MAX7219_SCK PB2
 #define MAX7219_DO PB1
+// TODO: refactor this to _CSN
 #define MAX7219_CS PB0
 
 //register address map
