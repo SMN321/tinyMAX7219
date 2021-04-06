@@ -5,17 +5,22 @@ static volatile uint8_t matrix[8];
 
 inline void max7219_matrix_set_pixel(uint8_t row, uint8_t col, uint8_t state) {
     if (state) {
-        matrix[row] |= (1u << (uint8_t) (7 - col));
+        max7219_matrix_activate_pixel(row, col);
     } else {
-        matrix[row] &= ~(1u << (uint8_t) (7-col));
+        max7219_matrix_clear_pixel(row, col);
     }
+    // both of the above methods may call update(), no need to introduce redundancy here.
+}
+
+inline void max7219_matrix_activate_pixel(uint8_t row, uint8_t col) {
+    matrix[row] |= (1u << (uint8_t) (7 - col));
 #ifndef MAX7219_MATRIX_UPDATE_MANUALLY
     max7219_matrix_update();
 #endif
 }
 
-inline void max7219_matrix_activate_pixel(uint8_t row, uint8_t col) {
-    matrix[row] |= (1u << (uint8_t) (7 - col));
+inline void max7219_matrix_clear_pixel(uint8_t row, uint8_t col) {
+    matrix[row] &= ~(1u << (uint8_t) (7-col));
 #ifndef MAX7219_MATRIX_UPDATE_MANUALLY
     max7219_matrix_update();
 #endif
