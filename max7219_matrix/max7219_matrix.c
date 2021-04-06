@@ -1,26 +1,21 @@
 
 #include "max7219_matrix.h"
 
-static uint8_t matrix[8];
+static volatile uint8_t matrix[8];
 
 inline void max7219_matrix_set_pixel(uint8_t row, uint8_t col, uint8_t state) {
     if (state) {
-        max7219_matrix_activate_pixel(row, col);
+        matrix[row] |= (1u << (uint8_t) (7 - col));
     } else {
-        max7219_matrix_clear_pixel(row, col);
+        matrix[row] &= ~(1u << (uint8_t) (7-col));
     }
-    // update is called inside each of the two functions above, no need for redundancy here
-}
-
-inline void max7219_matrix_activate_pixel(uint8_t row, uint8_t col) {
-    matrix[row] |= (1u << (uint8_t) (7 - col));
 #ifndef MAX7219_MATRIX_UPDATE_MANUALLY
     max7219_matrix_update();
 #endif
 }
 
-inline void max7219_matrix_clear_pixel(uint8_t row, uint8_t col) {
-    matrix[row] &= ~(1u << (uint8_t) (7-col));
+inline void max7219_matrix_activate_pixel(uint8_t row, uint8_t col) {
+    matrix[row] |= (1u << (uint8_t) (7 - col));
 #ifndef MAX7219_MATRIX_UPDATE_MANUALLY
     max7219_matrix_update();
 #endif
@@ -176,7 +171,7 @@ inline void max7219_matrix_clear(void) {
 }
 
 inline void max7219_matrix_update(void) {
-    for (uint8_t i = 0; i < 8; i++) {
+    for (volatile uint8_t i = 0; i < 8; i++) {
         max7219_send_command(i + 1, matrix[i]);
     }
 }
