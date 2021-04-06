@@ -2,37 +2,30 @@
 #include "max7219_driver.h"
 #include <avr/io.h>
 
-static void send_byte(uint8_t data) {
+static void send_byte(volatile uint8_t data) {
     //USIDR = data;
     // this seemed to work in the simulations
     // the whole block needed 20 clock cycles there
     __asm__ volatile (
     /* asm instructions */
-    //"out %[usicr], %[low]"  "\n\t"
-    "push r16"              "\n\t"
-    "push r17"              "\n\t"
     "out %[usidr], %[data]" "\n\t"
-    "mov r16, %[high]"      "\n\t"
-    "mov r17, %[low]"      "\n\t"
-    "out %[usicr], r16" "\n\t"
-    "out %[usicr], r17"  "\n\t"
-    "out %[usicr], r16" "\n\t"
-    "out %[usicr], r17"  "\n\t"
-    "out %[usicr], r16" "\n\t"
-    "out %[usicr], r17"  "\n\t"
-    "out %[usicr], r16" "\n\t"
-    "out %[usicr], r17"  "\n\t"
-    "out %[usicr], r16" "\n\t"
-    "out %[usicr], r17"  "\n\t"
-    "out %[usicr], r16" "\n\t"
-    "out %[usicr], r17"  "\n\t"
-    "out %[usicr], r16" "\n\t"
-    "out %[usicr], r17"  "\n\t"
-    "out %[usicr], r16" "\n\t"
-    "out %[usicr], r17"  "\n\t"
-    "out %[usisr], 0"       "\n\t"
-    "pop r17"               "\n\t"
-    "pop r16"
+    "out %[usicr], %[high]" "\n\t"
+    "out %[usicr], %[low]"  "\n\t"
+    "out %[usicr], %[high]" "\n\t"
+    "out %[usicr], %[low]"  "\n\t"
+    "out %[usicr], %[high]" "\n\t"
+    "out %[usicr], %[low]"  "\n\t"
+    "out %[usicr], %[high]" "\n\t"
+    "out %[usicr], %[low]"  "\n\t"
+    "out %[usicr], %[high]" "\n\t"
+    "out %[usicr], %[low]"  "\n\t"
+    "out %[usicr], %[high]" "\n\t"
+    "out %[usicr], %[low]"  "\n\t"
+    "out %[usicr], %[high]" "\n\t"
+    "out %[usicr], %[low]"  "\n\t"
+    "out %[usicr], %[high]" "\n\t"
+    "out %[usicr], %[low]"  "\n\t"
+    "out %[usisr], 0"
     : /* no outputs */
     : /* only inputs */
     [data]  "r" (data),
@@ -44,14 +37,14 @@ static void send_byte(uint8_t data) {
     // USICR = (1u << USIWM0) | (1u << USITC);
     // USICR = (1u << USIWM0) | (1u << USITC) | (1u << USICLK);
     : /* no clobbers */
-    "r16", "r17");
+    );
     //USISR = 0;
 }
 
 inline void max7219_init() {
     DDRB |= (1u << MAX7219_SCK) | (1u << MAX7219_DO) | (1u << MAX7219_CS);
-    PORTB |= (1u << MAX7219_CS);
-    PORTB &= ~(1u << MAX7219_SCK);
+    PORTB |= (1u << MAX7219_CS);    // CS to 1
+    PORTB &= ~(1u << MAX7219_SCK);  // SCK to 0
     USISR = 0;
     max7219_send_command(MAX7219_DECODE_MODE, 0x00); // no Code B decoding
     max7219_send_command(MAX7219_SCAN_LIMIT, MAX7219_SCAN_LIMIT_7);
@@ -61,8 +54,8 @@ inline void max7219_init() {
 }
 
 inline void max7219_send_command(uint8_t address, uint8_t data) {
-    PORTB &= ~(1u << MAX7219_CS);
+    PORTB &= ~(1u << MAX7219_CS);   // CS to 0
     send_byte(address);
     send_byte(data);
-    PORTB |= (1u << MAX7219_CS);
+    PORTB |= (1u << MAX7219_CS);    // CS to 1
 } 
