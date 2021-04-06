@@ -2,12 +2,13 @@
 #include "max7219_driver.h"
 #include <avr/io.h>
 
-static inline void send_byte(uint8_t data) {
-    USIDR = data;
+static void send_byte(uint8_t data) {
+    //USIDR = data;
     // this seemed to work in the simulations
     // the whole block needed 20 clock cycles there
     asm volatile (
     /* asm instructions */
+    "out %[usidr], %[data]" "\n\t"
     "out %[usicr], %[high]" "\n\t"
     "out %[usicr], %[low]"  "\n\t"
     "out %[usicr], %[high]" "\n\t"
@@ -23,14 +24,18 @@ static inline void send_byte(uint8_t data) {
     "out %[usicr], %[high]" "\n\t"
     "out %[usicr], %[low]"  "\n\t"
     "out %[usicr], %[high]" "\n\t"
-    "out %[usicr], %[low]"
+    "out %[usicr], %[low]"  "\n\t"
+    "out %[usisr], 0"
     : /* no outputs */
     : /* only inputs */
-    [usicr] "M" (_SFR_IO_ADDR(USICR)),
-    [high] "r" ((1<<USIWM0)|(0<<USICS0)|(1<<USITC)),
-    [low] "r" ((1<<USIWM0)|(0<<USICS0)|(1<<USITC)|(1<<USICLK))
+    [data]  "r" (data),
+    [usidr] "I" (_SFR_IO_ADDR(USIDR)),
+    [usicr] "I" (_SFR_IO_ADDR(USICR)),
+    [usisr] "I" (_SFR_IO_ADDR(USISR)),
+    [high]  "r" ((1<<USIWM0)|(0<<USICS0)|(1<<USITC)),
+    [low]   "r" ((1<<USIWM0)|(0<<USICS0)|(1<<USITC)|(1<<USICLK))
     /* no clobbers */);
-    USISR = 0;
+    //USISR = 0;
 }
 
 inline void max7219_init() {

@@ -3,7 +3,7 @@
 
 static uint8_t matrix[8];
 
-inline void max7219_matrix_set_pixel(uint8_t row, uint8_t col) {
+inline void max7219_matrix_set_pixel(uint8_t row, uint8_t col, uint8_t state) {
     matrix[row] |= (1 << (7 - col));
 }
 

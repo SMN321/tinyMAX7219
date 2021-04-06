@@ -10,7 +10,7 @@
 #endif // MAX7219_SCK
 
 #ifndef MAX7219_DO
-#define MAX7219_DO ((uintt8_t) PB1)
+#define MAX7219_DO ((uint8_t) PB1)
 #endif // MAX7219_DO
 
 // TODO: refactor this to _CSN
