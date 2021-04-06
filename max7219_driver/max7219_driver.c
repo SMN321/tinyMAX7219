@@ -6,35 +6,45 @@ static void send_byte(uint8_t data) {
     //USIDR = data;
     // this seemed to work in the simulations
     // the whole block needed 20 clock cycles there
-    asm volatile (
+    __asm__ volatile (
     /* asm instructions */
+    //"out %[usicr], %[low]"  "\n\t"
+    "push r16"              "\n\t"
+    "push r17"              "\n\t"
     "out %[usidr], %[data]" "\n\t"
-    "out %[usicr], %[high]" "\n\t"
-    "out %[usicr], %[low]"  "\n\t"
-    "out %[usicr], %[high]" "\n\t"
-    "out %[usicr], %[low]"  "\n\t"
-    "out %[usicr], %[high]" "\n\t"
-    "out %[usicr], %[low]"  "\n\t"
-    "out %[usicr], %[high]" "\n\t"
-    "out %[usicr], %[low]"  "\n\t"
-    "out %[usicr], %[high]" "\n\t"
-    "out %[usicr], %[low]"  "\n\t"
-    "out %[usicr], %[high]" "\n\t"
-    "out %[usicr], %[low]"  "\n\t"
-    "out %[usicr], %[high]" "\n\t"
-    "out %[usicr], %[low]"  "\n\t"
-    "out %[usicr], %[high]" "\n\t"
-    "out %[usicr], %[low]"  "\n\t"
-    "out %[usisr], 0"
+    "mov r16, %[high]"      "\n\t"
+    "mov r17, %[low]"      "\n\t"
+    "out %[usicr], r16" "\n\t"
+    "out %[usicr], r17"  "\n\t"
+    "out %[usicr], r16" "\n\t"
+    "out %[usicr], r17"  "\n\t"
+    "out %[usicr], r16" "\n\t"
+    "out %[usicr], r17"  "\n\t"
+    "out %[usicr], r16" "\n\t"
+    "out %[usicr], r17"  "\n\t"
+    "out %[usicr], r16" "\n\t"
+    "out %[usicr], r17"  "\n\t"
+    "out %[usicr], r16" "\n\t"
+    "out %[usicr], r17"  "\n\t"
+    "out %[usicr], r16" "\n\t"
+    "out %[usicr], r17"  "\n\t"
+    "out %[usicr], r16" "\n\t"
+    "out %[usicr], r17"  "\n\t"
+    "out %[usisr], 0"       "\n\t"
+    "pop r17"               "\n\t"
+    "pop r16"
     : /* no outputs */
     : /* only inputs */
     [data]  "r" (data),
     [usidr] "I" (_SFR_IO_ADDR(USIDR)),
     [usicr] "I" (_SFR_IO_ADDR(USICR)),
     [usisr] "I" (_SFR_IO_ADDR(USISR)),
-    [high]  "r" ((1<<USIWM0)|(0<<USICS0)|(1<<USITC)),
-    [low]   "r" ((1<<USIWM0)|(0<<USICS0)|(1<<USITC)|(1<<USICLK))
-    /* no clobbers */);
+    [high]  "r" ((1<<USIWM0)|(1<<USITC)),
+    [low]   "r" ((1<<USIWM0)|(1<<USITC)|(1<<USICLK))
+    // USICR = (1u << USIWM0) | (1u << USITC);
+    // USICR = (1u << USIWM0) | (1u << USITC) | (1u << USICLK);
+    : /* no clobbers */
+    "r16", "r17");
     //USISR = 0;
 }
 
