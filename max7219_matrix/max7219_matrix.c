@@ -106,7 +106,7 @@ inline void max7219_matrix_flip_horizontal(void) {
 
 inline void max7219_matrix_flip_vertical(void) {
     uint8_t b;
-    for (uint8_t i = 0; i < 7; i++) {
+    for (uint8_t i = 0; i < 8; i++) {
         b = matrix[i];
         //reverse a byte
         b = (b & 0xF0u) >> 4u | (b & 0x0Fu) << 4u;
