@@ -7,6 +7,10 @@
 
 //TODO: implement n*8xm*8 matrices
 
+// uncomment the next macro or define it by yourself if the display should not be updated automatically
+// after each change of the matrix-state buffer
+//#define MAX7219_MATRIX_UPDATE_MANUALLY
+
 void max7219_matrix_set_pixel(uint8_t row, uint8_t col, uint8_t state);
 void max7219_matrix_activate_pixel(uint8_t x, uint8_t y);
 void max7219_matrix_set_row(uint8_t row, uint8_t data);
