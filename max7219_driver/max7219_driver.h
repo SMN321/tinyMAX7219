@@ -5,9 +5,18 @@
 #include <inttypes.h>
 
 //pins
+#ifndef MAX7219_SCK
 #define MAX7219_SCK ((uint8_t) PB2)
+#endif // MAX7219_SCK
+
+#ifndef MAX7219_DO
 #define MAX7219_DO ((uint8_t) PB1)
+#endif // MAX7219_DO
+
+// TODO: refactor this to _CSN
+#ifndef MAX7219_CS
 #define MAX7219_CS ((uint8_t) PB0)
+#endif // MAX7219_CS
 
 //register address map
 #define MAX7219_NO_OP           0x0
