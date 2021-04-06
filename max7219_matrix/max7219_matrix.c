@@ -1,7 +1,7 @@
 
 #include "max7219_matrix.h"
 
-static uint8_t matrix[8];
+static volatile uint8_t matrix[8];
 
 inline void max7219_matrix_set_pixel(uint8_t row, uint8_t col, uint8_t state) {
     matrix[row] |= (1 << (7 - col));
@@ -97,7 +97,7 @@ inline void max7219_matrix_flip_horizontal(void) {
 
 inline void max7219_matrix_flip_vertical(void) {
     uint8_t b;
-    for (uint8_t i = 0; i < 7; i++) {
+    for (uint8_t i = 0; i < 8; i++) {
         b = matrix[i];
         //reverse a byte
         b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
@@ -114,7 +114,7 @@ inline void max7219_matrix_clear(void) {
 }
 
 inline void max7219_matrix_update(void) {
-    for (uint8_t i = 0; i < 8; i++) {
+    for (volatile uint8_t i = 0; i < 8; i++) {
         max7219_send_command(i + 1, matrix[i]);
     }
 }

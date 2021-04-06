@@ -3,9 +3,13 @@
 #include <avr/io.h>
 
 static void send_byte(volatile uint8_t data) {
-    //USIDR = data;
-    // this seemed to work in the simulations
-    // the whole block needed 20 clock cycles there
+    // this seemed to work in the simulations the whole block needed 20 clock cycles there.
+    // Field-test also indicated that it's working now.
+    // By the way: the decompiled ELF indicated that the pure C based implementation has basically the same overall
+    // performance but two additional program counter delays during the first clock-phase, so that the clock-phases
+    // durations are therefore not equally long during the 8 cycles. Consequently, an inline-assembly was not necessary
+    // at all for the performance but only for the experience, I mean who can say of himself that he's done AVR
+    // inline-assembly at some point ;)
     __asm__ volatile (
     /* asm instructions */
     "out %[usidr], %[data]" "\n\t"
@@ -34,11 +38,8 @@ static void send_byte(volatile uint8_t data) {
     [usisr] "I" (_SFR_IO_ADDR(USISR)),
     [high]  "r" ((1<<USIWM0)|(1<<USITC)),
     [low]   "r" ((1<<USIWM0)|(1<<USITC)|(1<<USICLK))
-    // USICR = (1u << USIWM0) | (1u << USITC);
-    // USICR = (1u << USIWM0) | (1u << USITC) | (1u << USICLK);
     : /* no clobbers */
     );
-    //USISR = 0;
 }
 
 inline void max7219_init() {
