@@ -55,7 +55,7 @@ void max7219_matrix_set_matrix(const uint8_t data[8]) {
     #endif
 }
 
-void max7219_matrix_set_hex_string(uint64_t data) {
+void max7219_matrix_set_raw(uint64_t data) {
     for (uint8_t row = 0; row < 8; ++row) {
         matrix[row] = 0xFFu & (data >> (uint8_t) (8 * (7 - row)));
     }
@@ -184,6 +184,60 @@ void max7219_matrix_flip_vertical(void) {
     #ifndef MAX7219_MATRIX_UPDATE_MANUALLY
     max7219_matrix_update();
     #endif
+}
+
+void max7219_matrix_filter_and_matrix(const uint8_t filter[8]) {
+    for (uint8_t row = 0; row < 8; ++row) {
+        matrix[row] &= filter[row];
+    }
+    #ifndef MAX7219_MATRIX_UPDATE_MANUALLY
+    max7219_matrix_update();
+    #endif
+}
+
+void max7219_matrix_filter_and_raw(uint64_t filter) {
+    for (uint8_t row = 0; row < 8; ++row) {
+        matrix[row] &= 0xFFu & (filter >> (uint8_t) (8 * (7 - row)));
+    }
+#ifndef MAX7219_MATRIX_UPDATE_MANUALLY
+    max7219_matrix_update();
+#endif
+}
+
+void max7219_matrix_filter_or_matrix(const uint8_t filter[8]) {
+    for (uint8_t row = 0; row < 8; ++row) {
+        matrix[row] |= filter[row];
+    }
+    #ifndef MAX7219_MATRIX_UPDATE_MANUALLY
+    max7219_matrix_update();
+    #endif
+}
+
+void max7219_matrix_filter_or_raw(uint64_t filter) {
+    for (uint8_t row = 0; row < 8; ++row) {
+        matrix[row] |= 0xFFu & (filter >> (uint8_t) (8 * (7 - row)));
+    }
+#ifndef MAX7219_MATRIX_UPDATE_MANUALLY
+    max7219_matrix_update();
+#endif
+}
+
+void max7219_matrix_filter_xor_matrix(const uint8_t filter[8]) {
+    for (uint8_t row = 0; row < 8; ++row) {
+        matrix[row] ^= filter[row];
+    }
+    #ifndef MAX7219_MATRIX_UPDATE_MANUALLY
+    max7219_matrix_update();
+    #endif
+}
+
+void max7219_matrix_filter_xor_raw(uint64_t filter) {
+    for (uint8_t row = 0; row < 8; ++row) {
+        matrix[row] ^= 0xFFu & (filter >> (uint8_t) (8 * (7 - row)));
+    }
+#ifndef MAX7219_MATRIX_UPDATE_MANUALLY
+    max7219_matrix_update();
+#endif
 }
 
 void max7219_matrix_clear(void) {
