@@ -30,5 +30,6 @@ void max7219_matrix_flip_horizontal(void);
 void max7219_matrix_flip_vertical(void);
 void max7219_matrix_clear(void);
 void max7219_matrix_update(void);
+volatile uint8_t *max7219_matrix_get_matrix(void);
 
 #endif //MAX7219_MATRIX_H

@@ -200,3 +200,7 @@ void max7219_matrix_update(void) {
         max7219_send_command(row + 1, matrix[row]);  // the MAX7219 starts indexing at 1
     }
 }
+
+volatile uint8_t *max7219_matrix_get_matrix(void) {
+    return matrix;
+}
