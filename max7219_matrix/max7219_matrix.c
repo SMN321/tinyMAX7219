@@ -1,7 +1,7 @@
 
 #include "max7219_matrix.h"
 
-static volatile uint8_t matrix[8];
+static volatile uint8_t matrix[8];  // row-first indexing
 
 inline void max7219_matrix_set_pixel(uint8_t row, uint8_t col, uint8_t state) {
     if (state) {
