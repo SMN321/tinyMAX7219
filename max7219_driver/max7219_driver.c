@@ -44,7 +44,7 @@ static void send_byte(volatile uint8_t data) {
 
 inline void max7219_init() {
     DDRB |= (1u << MAX7219_SCK) | (1u << MAX7219_DO) | (1u << MAX7219_CSN);
-    PORTB |= (1u << MAX7219_CSN);    // CSN to 1
+    PORTB |= (1u << MAX7219_CSN);   // CSN to 1
     PORTB &= ~(1u << MAX7219_SCK);  // SCK to 0
     USISR = 0;
     max7219_send_command(MAX7219_DECODE_MODE, 0x00); // no Code B decoding
