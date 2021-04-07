@@ -110,6 +110,23 @@ void max7219_matrix_invert_elements(void) {
     #endif
 }
 
+void max7219_matrix_transpose(void) {
+    uint8_t temp[8];
+    for (uint8_t row = 0; row < 8; ++row) {
+        temp[row] = matrix[row];
+        matrix[row] = 0;
+    }
+    for (uint8_t row = 0; row < 8; ++row) {
+        for (uint8_t col = 0; col < 8; ++col) {
+            // remember that right shifts on unsigned types always fill up with zeros
+            matrix[col] |= ((temp[row] & (1u << (uint8_t) (7 - col))) << col) >> row;
+        }
+    }
+    #ifndef MAX7219_MATRIX_UPDATE_MANUALLY
+    max7219_matrix_update();
+    #endif
+}
+
 void max7219_matrix_rotate_left(void) {
     uint8_t temp[8] = {0};
     for (uint8_t row_old = 0; row_old < 8; ++row_old) {
