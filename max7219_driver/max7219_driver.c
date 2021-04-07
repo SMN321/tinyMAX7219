@@ -36,15 +36,15 @@ static void send_byte(volatile uint8_t data) {
     [usidr] "I" (_SFR_IO_ADDR(USIDR)),
     [usicr] "I" (_SFR_IO_ADDR(USICR)),
     [usisr] "I" (_SFR_IO_ADDR(USISR)),
-    [high]  "r" ((1<<USIWM0)|(1<<USITC)),
-    [low]   "r" ((1<<USIWM0)|(1<<USITC)|(1<<USICLK))
+    [high]  "r" ((1u << (uint8_t) USIWM0) | (1u << (uint8_t) USITC)),
+    [low]   "r" ((1u << (uint8_t) USIWM0) | (1u << (uint8_t) USITC) | (1u << (uint8_t) USICLK))
     : /* no clobbers */
     );
 }
 
 inline void max7219_init() {
-    DDRB |= (1u << MAX7219_SCK) | (1u << MAX7219_DO) | (1u << MAX7219_CS);
-    PORTB |= (1u << MAX7219_CS);    // CS to 1
+    DDRB |= (1u << MAX7219_SCK) | (1u << MAX7219_DO) | (1u << MAX7219_CSN);
+    PORTB |= (1u << MAX7219_CSN);    // CSN to 1
     PORTB &= ~(1u << MAX7219_SCK);  // SCK to 0
     USISR = 0;
     max7219_send_command(MAX7219_DECODE_MODE, 0x00); // no Code B decoding
@@ -55,8 +55,8 @@ inline void max7219_init() {
 }
 
 inline void max7219_send_command(uint8_t address, uint8_t data) {
-    PORTB &= ~(1u << MAX7219_CS);   // CS to 0
+    PORTB &= ~(1u << MAX7219_CSN);   // CSN to 0
     send_byte(address);
     send_byte(data);
-    PORTB |= (1u << MAX7219_CS);    // CS to 1
+    PORTB |= (1u << MAX7219_CSN);    // CSN to 1
 } 

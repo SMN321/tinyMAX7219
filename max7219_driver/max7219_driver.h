@@ -13,10 +13,9 @@
 #define MAX7219_DO ((uint8_t) PB1)
 #endif // MAX7219_DO
 
-// TODO: refactor this to _CSN
-#ifndef MAX7219_CS
-#define MAX7219_CS ((uint8_t) PB0)
-#endif // MAX7219_CS
+#ifndef MAX7219_CSN
+#define MAX7219_CSN ((uint8_t) PB0)
+#endif // MAX7219_CSN
 
 //register address map
 #define MAX7219_NO_OP           0x0
